@@ -56,6 +56,10 @@ function validate_IP {
 	fi
 }
 
+function create_group {
+    echo -e "creating group ${YELLOW}$1${NONE}"
+}
+
 # MAIN SETUP
 function run_setup {
     echo "running setup...."
