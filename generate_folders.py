@@ -7,8 +7,9 @@
 #                                                                                
 
 import os
-from pathlib import Path  #needs python 3.5+
 import re
+from pathlib import Path 
+
 
 
 # Get user's project_name
@@ -57,15 +58,16 @@ path.parent.mkdir(parents=True, exist_ok=True)
 
 path = Path('ROLES')
 path.parent.mkdir(parents=True, exist_ok=True) 
+path = Path('ROLES')
+path.parent.mkdir(parents=True, exist_ok=True) 
+path = Path('ROLES')
+path.parent.mkdir(parents=True, exist_ok=True) 
+#Path('ROLES/').touch()
 
 
 # FUNCTIONS ---------------------------------------------------------------------
 
-def touch(fname, mode=0o666, dir_fd=None, **kwargs):
-    flags = os.O_CREAT | os.O_APPEND
-    with os.fdopen(os.open(fname, flags=flags, mode=mode, dir_fd=dir_fd)) as f:
-        os.utime(f.fileno() if os.utime in os.supports_fd else fname,
-            dir_fd=None if os.supports_fd else dir_fd, **kwargs)
+
 
 
 
