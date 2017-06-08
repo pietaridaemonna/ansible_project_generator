@@ -21,15 +21,18 @@ groups_id=()
 # FUNCTIONS ======================================================================
 
 function run_until () {
-    re=^[a-zA-Z-_]$
-    while [[ "$1" =~ ${re} ]]; do 
+    re=^[a-zA-Z0-9_-]$
+    while [[ "$1" =~ ${re} ]]; do    #TODO match only alphanum and _
         echo "NON compliant name.. try again"
     done
 }
 
 function fatal_error {
-    echo -e "${RED}FATAL ERROR${NONE}"
+    echo -e "${RED}=================================="
+    echo -e "FATAL ERROR${NONE}"
+    echo -e "==================================${NONE}"
     echo $1
+    echo -e "=================================="
 }
 
 # Check if IP address is valid  
@@ -63,7 +66,19 @@ function run_setup {
 
     # TODO change to while
     run_until ${PROJECT_NAME}
-    echo -e "your project name is ${YELLOW}${PROJECT_NAME}${NONE}"    
+    echo -e "your project name is ${YELLOW}${PROJECT_NAME}${NONE}"   
+
+    echo "creating folder struct"
+    mkdir ${PROJECT_NAME} 
+    cd ${PROJECT_NAME} 
+    mkdir inventories
+    cd inventories
+    mkdir production
+    mkdir test
+    mkdir dev
+    cd ..
+    mkdir library
+    mkdir roles
 }
 
 
@@ -75,17 +90,19 @@ echo "--------------------------------------------------------------------------
 echo "ansible project generator. https://github.com/pietaridaemonna/ansible_project_generator"
 echo "---------------------------------------------------------------------------------------"
 
-while getopts ":pdq:" optname
+# CHECK ARGUMENTS
+while getopts ":df:" optname
   do
     case "$optname" in
       "d")
-        echo -e "${GREY}using dynamic directory${NONE}"
+        echo -e "using ${YELLOW}dynamic${NONE} inventory (Cobbler, CMDB, etc..)"
         ;;
-      "q")
-        echo "Option $optname has value $OPTARG"
+      "f")
+        echo "USING CONFIG FILE, Option $optname has value $OPTARG"
         ;;
       "?")
-        echo "sdlkjf"
+        fatal_error "INVALID ARGUMENT"
+        exit 1
         ;;
       ":")
         echo "No argument value for option $OPTARG"
