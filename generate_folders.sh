@@ -20,6 +20,17 @@ groups_id=()
 
 # FUNCTIONS ======================================================================
 
+function run_until () {
+    re=^[a-zA-Z-_]$
+    while [[ "$1" =~ ${re} ]]; do 
+        echo "NON compliant name.. try again"
+    done
+}
+
+function fatal_error {
+    echo -e "${RED}FATAL ERROR${NONE}"
+    echo $1
+}
 
 # Check if IP address is valid  
 function validate_IP {
@@ -45,6 +56,14 @@ function validate_IP {
 # MAIN SETUP
 function run_setup {
     echo "running setup...."
+    echo ""  
+    
+    echo -e "Enter ${GREEN}Project name${NONE}"
+    read PROJECT_NAME
+
+    # TODO change to while
+    run_until ${PROJECT_NAME}
+    echo -e "your project name is ${YELLOW}${PROJECT_NAME}${NONE}"    
 }
 
 
@@ -56,21 +75,20 @@ echo "--------------------------------------------------------------------------
 echo "ansible project generator. https://github.com/pietaridaemonna/ansible_project_generator"
 echo "---------------------------------------------------------------------------------------"
 
-while getopts ":pq:" optname
+while getopts ":pdq:" optname
   do
     case "$optname" in
-      "p")
-        echo "Option $optname is specified"
+      "d")
+        echo -e "${GREY}using dynamic directory${NONE}"
         ;;
       "q")
         echo "Option $optname has value $OPTARG"
         ;;
       "?")
-        echo "Unknown option $OPTARG"
+        echo "sdlkjf"
         ;;
       ":")
         echo "No argument value for option $OPTARG"
-        run_setup
         ;;
       *)
       # Should not occur
@@ -79,6 +97,9 @@ while getopts ":pq:" optname
     esac
   done
 
+if [ $OPTIND -eq 1 ]; then echo "No options were passed";
+    run_setup
+fi
 
 
 exit $?
