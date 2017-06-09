@@ -69,7 +69,8 @@ function group_vars_deploy {
     read answer
 
     case ${answer} in
-    "Y") echo "copying group vars"
+    "Y") echo "enter ${GREEN}PATH${NONE} to group_vars file"
+        read groupvar_path
         ;;
     "N") echo "generating defaults"
         echo "# here we assign variables to particular groups" > group_vars/db_group
@@ -106,13 +107,36 @@ function run_setup {
     cd inventories
     # sub inventories
     mkdir production
+    echo "# inventory file for production servers" > production/hosts
+    mkdir production/group_vars
+    echo "# here we assign variables to particular groups" > production/group_vars/group1
+    mkdir production/host_vars
+    echo "# if systems need specific variables, put them here" > production/host_vars/hostname1
+
+
     mkdir test
+    echo "# inventory file for production servers" > test/hosts
+    mkdir test/group_vars
+    echo "# here we assign variables to particular groups" > test/group_vars/group1
+    mkdir test/host_vars
+    echo "# if systems need specific variables, put them here" > test/host_vars/hostname1
+    
     mkdir dev
+    echo "# inventory file for production servers" > dev/hosts
+    mkdir dev/group_vars
+    echo "# here we assign variables to particular groups" > dev/group_vars/group1
+    mkdir dev/host_vars
+    echo "# if systems need specific variables, put them here" > dev/host_vars/hostname1
     cd ..
 
     mkdir library
     mkdir filter_plugins
     mkdir roles
+    mkdir roles/web
+    mkdir roles/monitoring
+    mkdir roles/app
+    mkdir roles/db
+    mkdir roles/jump
 
     echo "#master playbook" > site.yml
     echo "#webservers playbook" > webservers.yml
