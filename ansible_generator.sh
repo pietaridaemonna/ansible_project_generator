@@ -60,6 +60,32 @@ function create_group {
     echo -e "creating group ${YELLOW}$1${NONE}"
 }
 
+function create_hostnames_from_file {
+    echo -e "creating hostnames from ${YELLOW}$1${NONE}"
+}
+
+function group_vars_deploy {
+    echo -e "Do you want to copy group_vars from local file? ${GREEN}[Y/N]${NONE}:"
+    read answer
+
+    case ${answer} in
+    "Y") echo "copying group vars"
+        ;;
+    "N") echo "generating defaults"
+        echo "# here we assign variables to particular groups" > group_vars/db_group
+        echo "# here we assign variables to particular groups" > group_vars/web_group
+        echo "# here we assign variables to particular groups" > group_vars/app_group
+        echo "# here we assign variables to particular groups" > group_vars/jump_group
+        ;;
+    *) echo "not an answer... generating defaults"
+        echo "# here we assign variables to particular groups" > group_vars/db_group
+        echo "# here we assign variables to particular groups" > group_vars/web_group
+        echo "# here we assign variables to particular groups" > group_vars/app_group
+        echo "# here we assign variables to particular groups" > group_vars/jump_group
+        ;;
+    esac
+}
+
 # MAIN SETUP
 function run_setup {
     echo "running setup...."
@@ -75,14 +101,33 @@ function run_setup {
     echo "creating folder struct"
     mkdir ${PROJECT_NAME} 
     cd ${PROJECT_NAME} 
+
     mkdir inventories
     cd inventories
+    # sub inventories
     mkdir production
     mkdir test
     mkdir dev
     cd ..
+
     mkdir library
+    mkdir filter_plugins
     mkdir roles
+
+    echo "#master playbook" > site.yml
+    echo "#webservers playbook" > webservers.yml
+    echo "#dbservers playbook" > dbservers.yml
+    echo "#appservers playbook" > appservers.yml
+    echo "#jumpservers playbook" > jumpservers.yml
+
+    mkdir group_vars
+    group_vars_deploy
+    
+
+    mkdir host_vars
+    echo " # if systems need specific variables, put them here" > host_vars/host1
+
+    tree
 }
 
 
